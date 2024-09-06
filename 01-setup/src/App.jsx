@@ -2,6 +2,9 @@ import { useEffect } from "react";
 
 import * as THREE from "three";
 
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import Stats from "three/examples/jsm/libs/stats.module.js";
+
 function App() {
   useEffect(() => {
     const scene = new THREE.Scene();
@@ -36,9 +39,16 @@ function App() {
     const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
     scene.add(boxMesh);
 
+    const controls = new OrbitControls(camera, renderer.domElement);
+
+    const stats = Stats();
+    document.body.appendChild(stats.dom);
+
     const animate = () => {
-      boxMesh.rotation.x += 0.01;
-      boxMesh.rotation.y += 0.01;
+      // boxMesh.rotation.x += 0.01;
+      // boxMesh.rotation.y += 0.01;
+      stats.update();
+      controls.update();
       renderer.render(scene, camera);
       window.requestAnimationFrame(animate);
     };
