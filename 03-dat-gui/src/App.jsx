@@ -18,7 +18,13 @@ function App() {
 
     //initialize
     const gui = new GUI();
-    
+
+    gui.add(boxMesh.rotation, "x", 0, Math.PI).name("Rotate X Axis");
+    gui.add(boxMesh.rotation, "y", 0, Math.PI).name("Rotate Y Axis");
+    gui.add(boxMesh.rotation, "z", 0, Math.PI).name("Rotate Z Axis");
+    gui.add(boxMesh.scale, "x", 0, 2).name("Scale X Axis");
+    gui.add(boxMesh.scale, "y", 0, 2).name("Scale Y Axis");
+    gui.add(boxMesh.scale, "z", 0, 2).name("Scale Z Axis");
   }, []);
 
   return (
