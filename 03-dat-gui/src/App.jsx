@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 import * as THREE from "three";
+import { GUI } from "dat.gui";
 
 import SceneInit from "./lib/SceneInit";
 
@@ -14,6 +15,10 @@ function App() {
     const boxMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
     const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
     test.scene.add(boxMesh);
+
+    //initialize
+    const gui = new GUI();
+    
   }, []);
 
   return (
