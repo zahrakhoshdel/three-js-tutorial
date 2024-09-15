@@ -97,6 +97,27 @@ function App() {
       .onChange((value) => dl.color.set(value));
     dlFolder.open();
 
+    // set up spot light + helper
+    const sl = new THREE.SpotLight(0x00ff00, 1, 8, Math.PI / 8, 0);
+    sl.position.set(0, 2, 2);
+    const slHelper = new THREE.SpotLightHelper(sl);
+    mainGroup.add(sl);
+    // mainGroup.add(sl, slHelper);
+
+    // set up spot light gui
+    const slSettings = {
+      visible: true,
+    };
+    const slFolder = gui.addFolder("spot light");
+    slFolder.add(slSettings, "visible").onChange((value) => {
+      sl.visible = value;
+      slHelper.visible = value;
+    });
+    slFolder.add(sl, "intensity", 0, 4, 0.5);
+    slFolder.add(sl, "angle", Math.PI / 16, Math.PI / 2, Math.PI / 16);
+    slFolder.add(sl, "castShadow");
+    slFolder.open();
+
     // Destroy the GUI on reload to prevent multiple stale UI from being displayed on screen.
     return () => {
       gui.destroy();
