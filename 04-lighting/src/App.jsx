@@ -57,6 +57,20 @@ function App() {
     boxMesh3.position.x = 2;
     mainGroup.add(boxMesh3);
 
+    // set up ambient light
+    const al = new THREE.AmbientLight(0xffffff, 0.5);
+    test.scene.add(al);
+
+    // set up ambient light gui
+    const alFolder = gui.addFolder("ambient light");
+    const alSettings = { color: al.color.getHex() };
+    alFolder.add(al, "visible");
+    alFolder.add(al, "intensity", 0, 1, 0.25);
+    alFolder
+      .addColor(alSettings, "color")
+      .onChange((value) => al.color.set(value));
+    alFolder.open();
+
     // Destroy the GUI on reload to prevent multiple stale UI from being displayed on screen.
     return () => {
       gui.destroy();
