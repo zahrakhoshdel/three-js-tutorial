@@ -71,6 +71,32 @@ function App() {
       .onChange((value) => al.color.set(value));
     alFolder.open();
 
+    // setup directional light + helper
+    const dl = new THREE.DirectionalLight(0xffffff, 0.5);
+    dl.position.set(0, 2, 2);
+    dl.castShadow = true;
+    const dlHelper = new THREE.DirectionalLightHelper(dl, 3);
+    mainGroup.add(dl);
+    // mainGroup.add(dl, dlHelper);
+
+    // set up directional light gui
+    const dlSettings = {
+      visible: true,
+      color: dl.color.getHex(),
+    };
+    const dlFolder = gui.addFolder("directional light");
+    dlFolder.add(dlSettings, "visible").onChange((value) => {
+      dl.visible = value;
+      dlHelper.visible = value;
+    });
+    dlFolder.add(dl, "intensity", 0, 1, 0.25);
+    dlFolder.add(dl.position, "y", 1, 4, 0.5);
+    dlFolder.add(dl, "castShadow");
+    dlFolder
+      .addColor(dlSettings, "color")
+      .onChange((value) => dl.color.set(value));
+    dlFolder.open();
+
     // Destroy the GUI on reload to prevent multiple stale UI from being displayed on screen.
     return () => {
       gui.destroy();

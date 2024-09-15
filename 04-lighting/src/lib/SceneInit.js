@@ -21,8 +21,8 @@ export default class SceneInit {
     this.controls = undefined;
 
     // NOTE: Lighting is basically required.
+    this.spotLight = undefined;
     this.ambientLight = undefined;
-    this.directionalLight = undefined;
   }
 
   initialize() {
@@ -39,9 +39,12 @@ export default class SceneInit {
     const canvas = document.getElementById(this.canvasId);
     this.renderer = new THREE.WebGLRenderer({
       canvas,
+      // NOTE: Anti-aliasing smooths out the edges.
       antialias: true,
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    // enable this for shadows
+    this.renderer.shadowMap.enabled = true;
     document.body.appendChild(this.renderer.domElement);
 
     this.clock = new THREE.Clock();
@@ -49,23 +52,13 @@ export default class SceneInit {
     this.stats = Stats();
     document.body.appendChild(this.stats.dom);
 
-    // ambient light which is for the whole scene
-    this.ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    this.ambientLight.castShadow = true;
-    this.scene.add(this.ambientLight);
-
-    // directional light - parallel sun rays
-    this.directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    // this.directionalLight.castShadow = true;
-    this.directionalLight.position.set(0, 32, 64);
-    this.scene.add(this.directionalLight);
-
     // if window resizes
     window.addEventListener("resize", () => this.onWindowResize(), false);
   }
 
   animate() {
     // NOTE: Window is implied.
+    // requestAnimationFrame(this.animate.bind(this));
     window.requestAnimationFrame(this.animate.bind(this));
     this.render();
     this.stats.update();
@@ -73,6 +66,8 @@ export default class SceneInit {
   }
 
   render() {
+    // NOTE: Update uniform data on each render.
+    // this.uniforms.u_time.value += this.clock.getDelta();
     this.renderer.render(this.scene, this.camera);
   }
 
