@@ -4,6 +4,7 @@ import * as THREE from "three";
 import { GUI } from "dat.gui";
 
 import SceneInit from "./lib/SceneInit";
+import { color } from "three/webgpu";
 
 function App() {
   useEffect(() => {
@@ -117,6 +118,32 @@ function App() {
     slFolder.add(sl, "angle", Math.PI / 16, Math.PI / 2, Math.PI / 16);
     slFolder.add(sl, "castShadow");
     slFolder.open();
+
+    // set up point light + helper
+    const pl = new THREE.PointLight(0xffffff, 1, 8, 2);
+    pl.position.set(2, 2, 2);
+    const plHelper = new THREE.PointLightHelper(pl, 0.5);
+    mainGroup.add(pl, plHelper);
+
+    //set up point light gui
+    const plSettings = {
+      visible: true,
+      color: sl.color.getHex(),
+    };
+    const plFolder = gui.addFolder("point light");
+    plFolder.add(plSettings, "visible").onChange((value) => {
+      pl.visible = value;
+      plHelper.visible = value;
+    });
+    plFolder.add(pl, "intensity", 0, 2, 0.25);
+    plFolder.add(pl.position, "x", -2, 4, 0.5);
+    plFolder.add(pl.position, "y", -2, 4, 0.5);
+    plFolder.add(pl.position, "z", -2, 4, 0.5);
+    plFolder.add(pl, "castShadow");
+    plFolder
+      .addColor(plSettings, "color")
+      .onChange((value) => pl.color.set(value));
+    plFolder.open();
 
     // Destroy the GUI on reload to prevent multiple stale UI from being displayed on screen.
     return () => {
